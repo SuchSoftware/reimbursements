@@ -1,8 +1,6 @@
 const createBookshelf = require('bookshelf')
-const createKnex = require('knex')
 
-module.exports = function createModels(databaseUrl) {
-  const knex = createKnex(databaseUrl)
+module.exports = function createModels(knex) {
   const bookshelf = createBookshelf(knex)
 
   const Image = bookshelf.Model.extend({

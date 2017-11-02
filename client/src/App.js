@@ -73,23 +73,24 @@ class App extends Component {
     }
 
     const name = `${id}.${this.state.file.type.split('/')[1]}`
-    const url = `/get-upload-url?name=${name}&type=${this.state.file.type}`
+    const signingUrl = `/get-upload-url?name=${name}&type=${this.state.file
+      .type}`
 
-    fetch(url)
+    fetch(signingUrl)
       .then(response => response.json())
       .then(json => json.data)
-      // .then(({ signedRequest }) =>
-      //   // fetch(signedRequest, {
-      //   //   body: this.state.file,
-      //   //   method: 'PUT',
-      //   //   mode: 'cors',
-      //   // }),
-      // )
-      .then(() => {
+      .then(({ signedRequest, url }) =>
+        fetch(signedRequest, {
+          body: this.state.file,
+          method: 'PUT',
+          mode: 'cors',
+        }).then(() => url),
+      )
+      .then(url => {
         this.setState(() => ({ uploadStep: 1 }))
 
         const options = {
-          body: JSON.stringify({ id }),
+          body: JSON.stringify({ id, url }),
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -97,9 +98,9 @@ class App extends Component {
           method: 'POST',
         }
 
-        return fetch('/images', options)
+        return fetch('/images', options).then(() => url)
       })
-      .then(() => {
+      .then(url => {
         this.setState(() => ({ uploadStep: 2 }))
 
         const options = {
@@ -111,10 +112,10 @@ class App extends Component {
           method: 'POST',
         }
 
-        return fetch('/items', options)
+        return fetch('/items', options).then(() => url)
       })
-      .then(() => {
-        const newItems = [...this.state.items, item]
+      .then(url => {
+        const newItems = [...this.state.items, { ...item, imageUrl: url }]
         this.setState(() => ({ items: newItems, uploadStep: 3 }))
 
         this.resetFormState()
@@ -209,7 +210,9 @@ class App extends Component {
                     <Table.Row key={item.id}>
                       <Table.Cell>{item.description}</Table.Cell>
                       <Table.Cell>${item.amount}</Table.Cell>
-                      <Table.Cell>image here</Table.Cell>
+                      <Table.Cell>
+                        <Img src={item.imageUrl} style={{ maxWidth: '50px' }} />
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>

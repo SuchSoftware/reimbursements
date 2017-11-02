@@ -1,8 +1,7 @@
 {
   "name": "reimbursements-server",
   "version": "1.0.0",
-  "description":
-    "An app to show the difference between traditional MVC and event sourcing",
+  "description": "An app to show the difference between traditional MVC and event sourcing",
   "main": "index.js",
   "author": "Ethan Garofolo <ethan@suchsoftware.com>",
   "license": "MIT",
@@ -24,12 +23,15 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "knex": "^0.13.0",
+    "node-uuid": "^1.4.8",
     "pg": "^7.3.0"
   },
   "scripts": {
     "start": "nodemon --exec node index.js"
   },
   "eslintConfig": {
-    "extends": ["suchsoftware"]
+    "extends": [
+      "suchsoftware"
+    ]
   }
 }
