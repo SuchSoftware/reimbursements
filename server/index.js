@@ -69,10 +69,3 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(env.port)
-
-// [ ] Handle the receipt uploads
-// [ ] Handle the rest of the metadata
-// [ ] Handle marking something reimbursed
-// [ ] Serve the built client
-
-// When doing the command, be sure to highlight idempotence
